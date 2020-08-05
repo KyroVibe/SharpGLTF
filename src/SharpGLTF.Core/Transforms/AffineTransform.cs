@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
+using QuaternionNet = MathNet.Spatial.Euclidean.Quaternion;
+using Vector3D = MathNet.Spatial.Euclidean.Vector3D;
+
 namespace SharpGLTF.Transforms
 {
     /// <summary>
@@ -60,16 +63,28 @@ namespace SharpGLTF.Transforms
         /// Rotation
         /// </summary>
         public Quaternion Rotation;
+        public QuaternionNet RotationNet {
+            get => new QuaternionNet(Rotation.W, Rotation.X, Rotation.Y, Rotation.Z);
+            set => Rotation = new Quaternion((float)value.ImagX, (float)value.ImagY, (float)value.ImagZ, (float)value.Real);
+        }
 
         /// <summary>
         /// Scale
         /// </summary>
         public Vector3 Scale;
+        public Vector3D ScaleNet {
+            get => new Vector3D(Scale.X, Scale.Y, Scale.Z);
+            set => Scale = new Vector3((float)value.X, (float)value.Y, (float)value.Z);
+        }
 
         /// <summary>
         /// Translation
         /// </summary>
         public  Vector3 Translation;
+        public Vector3D TranslationNet {
+            get => new Vector3D(Translation.X, Translation.Y, Translation.Z);
+            set => Translation = new Vector3((float)value.X, (float)value.Y, (float)value.Z);
+        }
 
         #endregion
 

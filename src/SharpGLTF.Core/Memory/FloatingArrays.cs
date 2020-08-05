@@ -4,6 +4,14 @@ using System.Numerics;
 using System.Collections;
 using System.Linq;
 
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Spatial.Euclidean;
+
+using Quaternion = System.Numerics.Quaternion;
+using QuaternionNet = MathNet.Spatial.Euclidean.Quaternion;
+using Vector = System.Numerics.Vector;
+using VectorNet = MathNet.Numerics.LinearAlgebra.Vector<double>;
+
 using BYTES = System.Memory<byte>;
 
 using ENCODING = SharpGLTF.Schema2.EncodingType;
@@ -413,6 +421,13 @@ namespace SharpGLTF.Memory
 
         bool ICollection<Vector2>.Remove(Vector2 item) { throw new NotSupportedException(); }
 
+        public IList<Vector2D> AsVector2DArray()
+        {
+            var l = new List<Vector2D>();
+            this.ToList().ForEach(x => l.Add(new Vector2D(x.X, x.Y)));
+            return l;
+        }
+
         #endregion
     }
 
@@ -517,6 +532,13 @@ namespace SharpGLTF.Memory
         void ICollection<Vector3>.Clear() { throw new NotSupportedException(); }
 
         bool ICollection<Vector3>.Remove(Vector3 item) { throw new NotSupportedException(); }
+
+        public IList<Vector3D> AsVector3DArray()
+        {
+            var l = new List<Vector3D>();
+            this.ToList().ForEach(x => l.Add(new Vector3D(x.X, x.Y, x.Z)));
+            return l;
+        }
 
         #endregion
     }
@@ -624,6 +646,13 @@ namespace SharpGLTF.Memory
 
         bool ICollection<Vector4>.Remove(Vector4 item) { throw new NotSupportedException(); }
 
+        public IList<VectorNet> AsVector4DArray()
+        {
+            var l = new List<VectorNet>();
+            this.ToList().ForEach(x => l.Add(VectorNet.Build.DenseOfArray(new double[] { x.X, x.Y, x.Z, x.W })));
+            return l;
+        }
+
         #endregion
     }
 
@@ -707,6 +736,13 @@ namespace SharpGLTF.Memory
         void ICollection<Quaternion>.Clear() { throw new NotSupportedException(); }
 
         bool ICollection<Quaternion>.Remove(Quaternion item) { throw new NotSupportedException(); }
+
+        public IList<QuaternionNet> AsQuaternionNetArray()
+        {
+            var l = new List<QuaternionNet>();
+            this.ToList().ForEach(x => l.Add(new QuaternionNet(x.W, x.X, x.Y, x.Z)));
+            return l;
+        }
 
         #endregion
     }
@@ -810,6 +846,18 @@ namespace SharpGLTF.Memory
 
         bool ICollection<Matrix4x4>.Remove(Matrix4x4 item) { throw new NotSupportedException(); }
 
+        public IList<Matrix<double>> AsQuaternionNetArray()
+        {
+            var l = new List<Matrix<double>>();
+            this.ToList().ForEach(x => l.Add(Matrix<double>.Build.DenseOfArray(new double[,] {
+                { x.M11, x.M12, x.M13, x.M14 },
+                { x.M21, x.M22, x.M23, x.M24 },
+                { x.M31, x.M32, x.M33, x.M34 },
+                { x.M41, x.M42, x.M43, x.M44 }
+            })));
+            return l;
+        }
+
         #endregion
     }
 
@@ -912,6 +960,17 @@ namespace SharpGLTF.Memory
         void ICollection<Single[]>.Clear() { throw new NotSupportedException(); }
 
         bool ICollection<Single[]>.Remove(Single[] item) { throw new NotSupportedException(); }
+
+        public IList<double[]> AsQuaternionNetArray()
+        {
+            var l = new List<double[]>();
+            this.ToList().ForEach(x => {
+                var l2 = new List<double>();
+                Array.ForEach(x, y => l2.Add((double)y));
+                l.Add(l2.ToArray());
+            });
+            return l;
+        }
 
         #endregion
     }
