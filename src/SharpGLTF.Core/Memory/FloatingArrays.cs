@@ -421,10 +421,11 @@ namespace SharpGLTF.Memory
 
         bool ICollection<Vector2>.Remove(Vector2 item) { throw new NotSupportedException(); }
 
-        public IList<Vector2D> AsVector2DArray()
+        public IEnumerable<Vector2D> AsVector2DArray()
         {
-            var l = new List<Vector2D>();
-            this.ToList().ForEach(x => l.Add(new Vector2D(x.X, x.Y)));
+            var l = new Vector2D[Count];
+            for (int i = 0; i < Count; i++)
+                l[i] = new Vector2D(_Accessor[i, 0], _Accessor[i, 1]);
             return l;
         }
 
@@ -533,10 +534,11 @@ namespace SharpGLTF.Memory
 
         bool ICollection<Vector3>.Remove(Vector3 item) { throw new NotSupportedException(); }
 
-        public IList<Vector3D> AsVector3DArray()
+        public IEnumerable<Vector3D> AsVector3DArray()
         {
-            var l = new List<Vector3D>();
-            this.ToList().ForEach(x => l.Add(new Vector3D(x.X, x.Y, x.Z)));
+            var l = new Vector3D[Count];
+            for (int i = 0; i < Count; i++)
+                l[i] = new Vector3D(_Accessor[i, 0], _Accessor[i, 1], _Accessor[i, 2]);
             return l;
         }
 
@@ -648,8 +650,9 @@ namespace SharpGLTF.Memory
 
         public IList<VectorNet> AsVector4DArray()
         {
-            var l = new List<VectorNet>();
-            this.ToList().ForEach(x => l.Add(VectorNet.Build.DenseOfArray(new double[] { x.X, x.Y, x.Z, x.W })));
+            var l = new VectorNet[Count];
+            for (int i = 0; i < Count; i++)
+                l[i] = VectorNet.Build.DenseOfArray(new double[] { _Accessor[i, 0], _Accessor[i, 0], _Accessor[i, 0], _Accessor[i, 0] });
             return l;
         }
 
@@ -739,8 +742,9 @@ namespace SharpGLTF.Memory
 
         public IList<QuaternionNet> AsQuaternionNetArray()
         {
-            var l = new List<QuaternionNet>();
-            this.ToList().ForEach(x => l.Add(new QuaternionNet(x.W, x.X, x.Y, x.Z)));
+            var l = new QuaternionNet[Count];
+            for (int i = 0; i < Count; i++)
+                l[i] = new QuaternionNet(_Accessor[i, 3], _Accessor[i, 0], _Accessor[i, 1], _Accessor[i, 2]);
             return l;
         }
 
@@ -848,13 +852,16 @@ namespace SharpGLTF.Memory
 
         public IList<Matrix<double>> AsQuaternionNetArray()
         {
-            var l = new List<Matrix<double>>();
-            this.ToList().ForEach(x => l.Add(Matrix<double>.Build.DenseOfArray(new double[,] {
-                { x.M11, x.M12, x.M13, x.M14 },
-                { x.M21, x.M22, x.M23, x.M24 },
-                { x.M31, x.M32, x.M33, x.M34 },
-                { x.M41, x.M42, x.M43, x.M44 }
-            })));
+            var l = new Matrix<double>[Count];
+            for (int i = 0; i < Count; i++)
+            {
+                l[i] = Matrix<double>.Build.DenseOfArray(new double[,] {
+                    { _Accessor[i, 0], _Accessor[i, 1], _Accessor[i, 2], _Accessor[i, 3] },
+                    { _Accessor[i, 4], _Accessor[i, 5], _Accessor[i, 6], _Accessor[i, 7] },
+                    { _Accessor[i, 8], _Accessor[i, 9], _Accessor[i, 10], _Accessor[i, 11] },
+                    { _Accessor[i, 12], _Accessor[i, 13], _Accessor[i, 14], _Accessor[i, 15] }
+                });
+            }
             return l;
         }
 
